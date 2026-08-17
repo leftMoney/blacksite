@@ -1,0 +1,17 @@
+# <INSTANCE> — persona warm-up schedule (example shape — customize).
+# Loaded by: warmup orchestration. A cold account is a burned account (§9 rule 6):
+# every persona completes organic warm-up before touching targets.
+# Per-platform sequences live in personas/warmup/<platform>.md.
+
+defaults:
+  min_warmup_days_by_tier:
+    yolk: 21      # native-passing, deep infiltration — weeks of warm-up
+    white: 10
+    shell: 3
+  daily_session_minutes: [15, 40]
+  inter_action_jitter_s: [90, 180]   # gentle but not glacial (§14)
+
+# TODO: per-persona overrides as accounts come online.
+personas:
+  P01: { platform_first: telegram, start_date: YYYY-MM-DD }
+  P02: { platform_first: instagram, start_date: YYYY-MM-DD }

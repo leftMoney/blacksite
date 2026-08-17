@@ -1,0 +1,67 @@
+# Example rules only — replace with YOUR instance's market/language vocabulary. See instances/_TEMPLATE/INSTANCE.md.
+#
+# Intent classifier patterns (rules layer M1).
+#
+# Each label has a list of regex patterns. A message gets the label whose
+# patterns produce the highest score (sum of matched-pattern weights). Ties
+# resolved by label priority order in this file.
+#
+# Patterns below are GENERIC ENGLISH placeholders demonstrating the structure.
+# Populate per-instance with the locked country's source-language vocabulary.
+# All regexes evaluated case-insensitive unless they contain non-ASCII chars.
+#
+# Add patterns by appending; never reorder labels (label order = tie-break).
+
+promo:
+  description: deposit-bonus, free-credit, time-limited offer
+  patterns:
+    - '\bpromo\b'
+    - '\bbonus\b'
+    - '\bfree\s+credit\b'
+    - '\bdeposit\b.{0,20}\bget\b'
+
+bait:
+  description: tip, sure-win formula, hot picks, leaked predictions
+  patterns:
+    - '\bsure\s*win\b'
+    - '\bguarantee[d]?\s*(win|payout)\b'
+    - '\bhot\s+pick\b'
+    - '\bleaked\s+numbers?\b'
+
+payment:
+  description: deposit, withdraw, transfer, wallet-related transaction
+  patterns:
+    - '\bdeposit\b'
+    - '\bwithdraw\b'
+    - '\bewallet\b'
+
+recruit:
+  description: agent recruiting, affiliate program, sub-account application
+  patterns:
+    - '\bagent\s+wanted\b'
+    - '\baffiliate\s+program\b'
+
+warn:
+  description: scam alert, fraud warning, do-not-trust call-out
+  patterns:
+    - '\bscam\b'
+    - '\bfraud\b'
+
+panic:
+  description: police raid, account freeze, site down, regulatory action
+  patterns:
+    - '\bpolice\s+raid\b'
+    - '\bsite\s+(?:down|seized|blocked)\b'
+
+triumph:
+  description: big-win flex, jackpot screenshot, payout proof
+  patterns:
+    - '\bjackpot\b'
+    - '\bbig\s+win\b'
+
+infomercial:
+  description: news-style update / channel intro / how-to / explainer
+  patterns:
+    - '\bhow\s+to\b'
+    - '\bguide\b'
+    - '\btutorial\b'

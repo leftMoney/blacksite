@@ -1,0 +1,93 @@
+# Example rules only — replace with YOUR instance's market/language vocabulary. See instances/_TEMPLATE/INSTANCE.md.
+#
+# Identifier extraction patterns (rules layer M1).
+# Each match is recorded as an entity row (kind=phone|lineid|promo|wallet|qr_mention)
+# and linked via messages_entities (mention_kind=identifier_extracted).
+#
+# Pattern format:
+#   regex: PCRE-compatible regex; first capture group (if any) becomes the
+#          canonical entity name; otherwise the full match.
+#   kind:  entity kind (must match values used in entities table)
+#   normalize: optional list of post-processing — strip_spaces, strip_dashes,
+#              lower, e164_local (per-instance phone-normalizer; see rules_layer._normalize)
+#
+# Order matters: more-specific patterns first, fallback patterns last (the
+# extractor short-circuits on each pattern match per slice of text).
+#
+# Patterns below are GENERIC ENGLISH/placeholder examples demonstrating the
+# structure. Populate per-instance with the locked country's phone formats,
+# messaging-app handles, wallet contexts, etc.
+
+phone:
+  # Example international-format phone (+CC NN...). Swap CC + normalizer for instance.
+  - regex: '(\+\d{1,3}[\s-]?\d[\d\s-]{7,12}\d)'
+    kind: phone
+    normalize: [strip_spaces, strip_dashes, e164_local]
+
+lineid:
+  # Example messaging-app handle after a keyword. Word boundary on the keyword
+  # so it does NOT fire inside unrelated words (e.g. CELINE/SKYLINE).
+  - regex: '(?i)(?:\bchat[\s_-]*(?:id|@)?)\s*[:：=]?\s*[@＠]?([a-z0-9_.\-]{3,30})'
+    kind: lineid
+    normalize: [lower]
+
+promo:
+  # Require keyword + at least one digit in captured code (lookahead) so plain
+  # words after "promo"/"code" (e.g. "promo signup") are not falsely captured.
+  - regex: '(?i)(?:promo|code)\s*(?:code)?\s*[:：=]?\s*((?=[a-zA-Z0-9]*\d)[a-zA-Z0-9]{4,16})\b'
+    kind: promo
+    normalize: [lower]
+  - regex: '(?i)bonus\s*code\s*[:：=]?\s*((?=[a-zA-Z0-9]*\d)[a-zA-Z0-9]{4,16})'
+    kind: promo
+    normalize: [lower]
+
+wallet:
+  # Example: national-ID-style numeric block (adjust digit count per instance).
+  - regex: '(?<!\d)\d{13}(?!\d)'
+    kind: wallet
+    normalize: []
+  # Example: wallet/bank handle with explicit provider context.
+  - regex: '(?i)(?:examplewallet|examplebank)\s*[:：=]?\s*(\d{10,16})'
+    kind: wallet
+    normalize: []
+
+qr_mention:
+  - regex: '(?i)(?:scan)\s*(?:qr)'
+    kind: qr_mention
+    normalize: []
+
+# ----------------------------------------------------------------------
+# Telegram funnel-link patterns (M4.5a)
+# ----------------------------------------------------------------------
+# Captures invite URLs and channel/bot references appearing in msg text so
+# downstream funnel_edges builder can synthesize directional edges
+# `from_chat → to_target` from message rows. Note: these are EXTRACTED as
+# entities here; whether they constitute a "real funnel push" (vs casual
+# mention) is decided in M4.5b/c via amplification + intent + AI review.
+# These are platform-mechanism patterns, not market data — generic by nature.
+
+tg_invite:
+  # t.me/+HASH (newer 2021+ invite format) and t.me/joinchat/HASH (legacy).
+  - regex: '(t\.me/(?:joinchat/|\+)[A-Za-z0-9_-]{16,32})(?![A-Za-z0-9_-])'
+    kind: tg_invite
+    normalize: [lower]
+
+tg_channel_ref:
+  # t.me/<username> or t.me/<username>/<msg_id>. Excludes joinchat/+/c/ paths.
+  - regex: 't\.me/(?!joinchat|\+|c/)([a-zA-Z][a-zA-Z0-9_]{4,31})(?:/\d+)?(?![A-Za-z0-9_])'
+    kind: tg_channel_ref
+    normalize: [lower]
+
+tg_bot_deeplink:
+  # t.me/<botname>?start=<param> — bot funnel entry-point. We capture the
+  # whole URL so funnel_edges can preserve the start-param payload.
+  - regex: '(t\.me/[a-zA-Z][a-zA-Z0-9_]*[Bb]ot\?start=[a-zA-Z0-9_-]+)'
+    kind: tg_bot_deeplink
+    normalize: []
+
+domain:
+  # Captured separately from indexer's URL_RE so we can mark as "identifier"
+  # specifically when domain appears in a payment/promo/recruit context.
+  # The indexer already records all domains as kind=domain entities; this
+  # block is reserved for context-tagging in v2 and currently empty.
+  []

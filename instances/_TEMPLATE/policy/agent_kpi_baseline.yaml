@@ -1,0 +1,19 @@
+# <INSTANCE> — Field Agent KPI baselines (example shape — customize).
+# Loaded by: processors/section_chief_eval.py; adjustable by the strategist via a
+# `metric_redefine` directive (CLAUDE.md §15.W). Section Chiefs score each Field Agent
+# daily against these and write results to runtime/agent_kpi/<agent_id>.yaml.
+
+baselines:
+  default:
+    min_24h_msg_yield: 20          # vs platform baseline
+    min_signal_to_noise: 0.30      # sampled, scored by Section Chief
+    max_tos_violations: 0          # any > 0 → incident
+    min_tier_hint_accuracy: 0.70
+
+  # Per-platform overrides (a high-volume lobby scanner vs a deep TG channel differ).
+  per_platform:
+    telegram: { min_24h_msg_yield: 50 }
+    tiktok:   { min_24h_msg_yield: 15 }
+
+# Commercial KPI target (CLAUDE.md §1.1): decision cards per week the fleet should yield.
+instance_decision_cards_per_week: 5

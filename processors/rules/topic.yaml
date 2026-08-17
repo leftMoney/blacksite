@@ -1,0 +1,51 @@
+# Example rules only — replace with YOUR instance's market/language vocabulary. See instances/_TEMPLATE/INSTANCE.md.
+#
+# Topic classifier patterns (rules layer M1).
+# A message can be tagged with multiple topics (sum of pattern hits per topic;
+# top-1 wins for the `topic` column, full vector retained as raw_topics later).
+#
+# Patterns below are GENERIC ENGLISH placeholders demonstrating the structure.
+# Populate per-instance with the locked country's source-language vocabulary.
+
+lottery:
+  description: legal lottery, underground lottery, regional lottery cultures
+  patterns:
+    - '\blotto\b'
+    - '\blottery\b'
+    - '\bdraw\b'
+
+sports:
+  description: football, sports KOL, sportsbook
+  patterns:
+    - '\bsportsbook\b'
+    - '\bbetting\b.{0,12}\b(?:football|soccer|odds)\b'
+    - '\bodds\b'
+
+casino:
+  description: casino games, baccarat, slot, roulette, live dealer
+  patterns:
+    - '\bcasino\b'
+    - '\bbaccarat\b'
+    - '\bslot\b'
+    - '\broulette\b'
+
+folk-belief:
+  description: belief economy, dream interpretation, lucky numbers, fortune
+  patterns:
+    - '\bfortune\s+telling\b'
+    - '\bhoroscope\b'
+    - '\blucky\s+numbers?\b'
+
+payment:
+  description: payment rails, e-wallets, banking
+  patterns:
+    - '\bewallet\b'
+    - '\bbank\s*transfer\b'
+
+regulatory:
+  description: laws, government, ministry, police, regulators
+  patterns:
+    - '\bgovernment\b'
+    - '\bministry\b'
+    - '\bregulation\b'
+    - '\bcrackdown\b'

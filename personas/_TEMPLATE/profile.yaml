@@ -1,0 +1,63 @@
+# <INSTANCE> — persona profile TEMPLATE.
+# Copy this dir to personas/<id>/ (e.g. personas/P01/) and fill in.
+#
+# 🔴 This file is PLAIN CONFIG (bio/archetype/interests) — it is git-tracked.
+#    Live secrets (password, real phone, proxy) go in .env keyed PERSONA_<id>_* ONLY.
+#    See .env.example. Never put credentials here.
+#
+# 🔴 Identity-axes isolation (CLAUDE.md §9.1a): each persona owns its OWN
+#    email + phone + residential IP + browser profile + username pattern.
+#    Never share an axis across personas. One persona = one coherent identity
+#    spanning multiple platforms (NOT one email per platform).
+
+persona_id: P01
+tier: yolk                          # yolk | white | shell
+archetype: <short_archetype_slug>
+status: onboarding                  # onboarding | live_partial | live | frozen | burned
+
+# Coherent identity — don't mix personalities (one persona = one vertical).
+identity:
+  display_name: "<Display Name>"
+  handle_pool:                      # platforms have different naming rules
+    - <handle_variant_1>
+    - <handle_variant_2>
+  age: 27
+  date_of_birth: YYYY-MM-DD         # used for register forms; keep consistent everywhere
+  gender_presentation: <female|male|nonbinary>
+  language: <e.g. bilingual_en_xx>
+  nationality_presentation: "<regional presentation — NOT impersonating a real person>"
+  timezone: <e.g. Asia/Bangkok — match your instance offset>
+  real_name:                        # for register forms (no emoji — real-name policies)
+    first: "<First>"
+    last: "<Last>"
+  residence:
+    country: "<Country>"
+    city: "<City>"
+  occupation: "<plausible occupation>"
+  bio_short: "<one-line bio matching the vertical>"
+
+# What the platform algorithm should learn to feed this persona.
+algorithm_target:
+  primary_verticals: [<vertical_1>, <vertical_2>]
+  secondary: [<vertical_3>]
+  avoid_consuming: [politics, heavy_news, controversial_drama]   # keep the feed focused
+
+# Platforms this persona will operate (priority order). register_status drives onboarding.
+platforms:
+  telegram:
+    priority: P0
+    rationale: "<why this persona on this platform>"
+    register_status: pending        # pending | warmup | live
+    requires_phone_otp: true
+    expected_warmup_days: 21
+
+# Per-platform isolated browser profile + session state (gitignored — live cookies).
+browser_profiles_root: personas/P01/browser/
+state_root: personas/P01/state/
+
+opsec:
+  - "Same display name + avatar + bio across all platforms this persona uses."
+  - "Separate browser user_data_dir per platform to isolate cookies + localStorage."
+  - "All actions logged to runtime (timestamp + intent + platform response)."
+  - "If banned on one platform, wait before re-register; refresh axes if needed."
+  - "Burn-and-replace: spin a fresh persona with new email + phone + handle if compromised."

@@ -1,0 +1,21 @@
+# <INSTANCE> — Reddit subreddit scan policy (example shape — customize).
+# Loaded by: agents/reddit/reddit_listen.py (praw, read-only).
+
+scope: read_only
+
+praw_user_agent: "blacksite-<instance>/0.1 (read-only intel; contact: you@example.com)"
+
+scan:
+  enable: true
+  schedule_cron: "25 */2 * * *"
+  per_run_max_posts_per_sub: 25
+
+# TODO: list subreddits relevant to your country/domain.
+subreddits:
+  - name: "example_country_sub"
+    tier_hint: shell
+  - name: "example_domain_sub"
+    tier_hint: white
+
+output:
+  raw_jsonl_dir: instances/_TEMPLATE/runtime/raw/reddit

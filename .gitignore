@@ -1,0 +1,129 @@
+# =============================================================
+# 🔴 Secrets — NEVER commit
+# =============================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+secrets/
+
+# =============================================================
+# Per-instance runtime state and account inventories
+# =============================================================
+instances/*/runtime/
+instances/*/accounts.yaml
+instances/*/accounts.local.yaml
+
+# =============================================================
+# Logs and caches
+# =============================================================
+*.log
+logs/
+.cache/
+runtime/
+tmp/
+
+# =============================================================
+# Python
+# =============================================================
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# =============================================================
+# Node / dashboard layer
+# =============================================================
+node_modules/
+.next/
+dist/
+build/
+
+# =============================================================
+# Temporal / Docker / SeaweedFS / Qdrant local data
+# =============================================================
+data/
+volumes/
+*.db
+*.sqlite
+*.sqlite3
+
+# =============================================================
+# OS
+# =============================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Boss-supplied TOTP secret drops
+mail imap*.txt
+P03.txt
+P04.txt
+P05.txt
+IMAP*.txt
+
+# Human-readable persona register bibles — contain DOB / real names /
+# register form values / interest seeds. Source-of-truth lives in
+# personas/<id>/profile.yaml (which IS tracked); these are boss-facing
+# visual mirrors only.
+personas/*_HUMAN.md
+personas/*_QUICK.md
+
+# =============================================================
+# 🔴 Persona session state (live cookies / fingerprint / browser profile)
+# Per CLAUDE.md §9: storage_state and Camoufox user_data_dir contain live
+# session cookies + browser fingerprint = secrets. Never commit.
+# =============================================================
+personas/*/state/
+personas/*/browser/
+
+# =============================================================
+# Model weights and binaries — too big for git, see config/llm_providers.yaml
+# for source pointers and run scripts/install_*.sh to (re)materialize.
+# =============================================================
+models/
+
+# =============================================================
+# Scratch / experimental / probe outputs
+# =============================================================
+_camoufox_test_profile/
+_recon/*.png
+_recon/*.bmp
+scratch/blacksite_crops/
+experiments/*results*.json
+experiments/_probe_*.py
+
+# Root-level temp / smoke-test droppings (Bash test write probes etc.)
+/_tmp_*.txt
+/tmp_*.txt
+/tmp_*.py
+/tmp_*.json
+/_tmp_*.bmp
+/_ribbon_*.bmp
+/can_write.txt
+/codex_test.txt
+/tmp_write_test.txt
+/temp_*.json
+/*.bmp
+
+# Root-level scratch screenshots / pasted images (not legitimate framework
+# assets — those live under personas/<P>/ or docs/)
+/[0-9]*.png
+/guitar_label_*.png
+/status_crop_*.png
+/r.jpg
+
+# =============================================================
+# Claude Code session state (per-project, machine-specific)
+# =============================================================
+.claude/
+
+# Permission-probe scratch (some writers escape Windows path colons to U+F03A
+# producing borked root-level filenames; see 5/27 cleanup)
+*perm_test*

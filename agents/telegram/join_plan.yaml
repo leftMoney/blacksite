@@ -1,0 +1,15 @@
+# Blacksite _TEMPLATE — Initial Telegram join plan.
+# Format: persona_id -> list of targets.
+#   target = "@username" (public)  |  "t.me/+invitehash" (private invite)
+# TODO: set seed channels for your instance (see instances/_TEMPLATE/policy/*.yaml)
+
+P01:
+  - "@example_channel_1"
+  - "@example_channel_2"
+  - "@examplebrand"
+  - "@ExampleFunnelChat"
+
+P02:
+  - "@example_channel_1"
+  - "@example_channel_2"
+  - "@examplebrand"

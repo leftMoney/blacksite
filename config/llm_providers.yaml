@@ -1,0 +1,70 @@
+# Blacksite LLM provider profile registry — single source of truth.
+#
+# To add or change a provider / model:
+#   1. Edit this file. Do NOT edit Python.
+#   2. Run `py scripts/switch_llm_provider.py <provider>` to push the new
+#      tier→model mapping into .env.
+#   3. Restart scripts/blacksite_daemon.py so cron jobs inherit the env.
+#
+# To list current registry from the CLI:
+#   py scripts/switch_llm_provider.py --list
+#
+# Override the path of this file by setting `BLACKSITE_LLM_PROFILES=...`
+# in the environment.
+#
+# Schema:
+#   default_provider: <name>     # picked when CLI is called with `auto`
+#   providers:
+#     <name>:
+#       switchable: true|false   # default true. false = registered for code
+#                                # to reference but not selectable as the
+#                                # active cloud LLM (e.g. local Ollama).
+#       tiers:                   # canonical model id used by API/CLI
+#         fast:        <id>      # cheap, high-volume (Stage 2 / Commander fast)
+#         strategic:   <id>      # per-signal interpretation (Stage 3 / Commander strategic)
+#         audit:       <id>      # daily / weekly Sonnet-class auditor
+#         coherence:   <id>      # cross-day strategist (Opus-class)
+#         bridge:      <id>      # TG DM bridge (Commander DM)
+#         (free-form tiers ok for non-switchable entries)
+#       claude_exe_alias:        # optional: short alias claude.exe accepts
+#         <tier>: <alias>        # callers that prefer brevity in --model flag
+#
+# Tier name policy:
+#   - `fast` / `strategic` / `audit` / `coherence` / `bridge` are the canonical
+#     names consumed by processors/llm_router.py and processors/llm_profiles.py.
+#   - Pipeline stages have their own STAGE2_MODEL / STAGE3_MODEL / AUDIT_MODEL
+#     env vars; those override the tier mapping when set.
+
+default_provider: claude
+
+providers:
+  claude:
+    tiers:
+      fast:       claude-haiku-4-5-20251001
+      strategic:  claude-sonnet-4-6
+      audit:      claude-sonnet-4-6
+      coherence:  claude-opus-4-7
+      bridge:     claude-sonnet-4-6
+    claude_exe_alias:
+      fast:       haiku
+      strategic:  sonnet
+      audit:      sonnet
+      coherence:  opus
+      bridge:     sonnet
+
+  codex:
+    tiers:
+      fast:       gpt-5.4-mini
+      strategic:  gpt-5.4
+      audit:      gpt-5.5
+      coherence:  gpt-5.5
+      bridge:     gpt-5.4
+
+  # Local-host inference (Ollama, GPU on RTX 5070 Ti). Not switchable like
+  # cloud providers — these models always run locally. Listed here so code
+  # (llm_call.py, Stage 1 qwen filter) can resolve model ids without
+  # hardcoding strings.
+  local:
+    switchable: false            # not selectable via switch_llm_provider; code-ref only
+    tiers:
+      vision:     qwen2.5vl:7b   # Stage 1 noise filter + Commander --model 7b

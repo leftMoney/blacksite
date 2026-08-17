@@ -1,0 +1,35 @@
+# Example rules only — replace with YOUR instance's market/language vocabulary. See instances/_TEMPLATE/INSTANCE.md.
+#
+# Tone classifier patterns (rules layer M1).
+# Captures register/affect — useful for separating bot-pump (urgent shouty)
+# from organic discussion (casual) from operator-voice (authoritative).
+#
+# Patterns below are GENERIC ENGLISH placeholders demonstrating the structure.
+# Populate per-instance with the locked country's source-language vocabulary.
+
+urgent:
+  description: time-pressure, scarcity, immediate-action language
+  patterns:
+    - '!!+'
+    - '\bnow\b!'
+    - '\blast\s+chance\b'
+    - '\blimited\s+time\b'
+
+authoritative:
+  description: admin / staff / operator-voice
+  patterns:
+    - '\badmin\b'
+    - '\bstaff\b'
+    - '\bcustomer\s+service\b'
+
+casual:
+  description: chat / banter / emoji-heavy / laughter markers
+  patterns:
+    - '\b(?:lol|lmao|haha)\b'
+    - '😂|🤣|😆|😅'
+
+desperate:
+  description: pleading / begging / help-seeking
+  patterns:
+    - '\bhelp\b'
+    - '\bplease\b'

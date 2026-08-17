@@ -1,0 +1,23 @@
+# <INSTANCE> — Facebook target Pages (example shape — customize).
+# Loaded by: agents/facebook/fb_page_scan.py. Meta family = read-only lurker (§9 rule 3).
+
+scope: read_only
+
+scan:
+  enable: true
+  schedule_cron: "15 * * * *"
+  per_run_max_pages: 10
+  per_run_max_posts_per_page: 20
+  inter_request_sleep_s: [6, 15]
+
+# TODO: list the Pages that matter for your domain (KOLs, competitors, communities).
+pages:
+  - name: "Example Competitor Page"
+    url: "https://www.facebook.com/example"
+    tier_hint: yolk
+  - name: "Example Influencer Page"
+    url: "https://www.facebook.com/example2"
+    tier_hint: white
+
+output:
+  raw_jsonl_dir: instances/_TEMPLATE/runtime/raw/facebook

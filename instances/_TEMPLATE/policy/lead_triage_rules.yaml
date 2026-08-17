@@ -1,0 +1,23 @@
+# <INSTANCE> — lead triage rules (example shape — customize).
+# Loaded by: processors/lead_triage.py, processors/lead_lifecycle.py.
+# Section Chief uses these to decide which raw signals become leads / library cards.
+
+# Minimum corroboration before a signal is promoted to a lead.
+min_corroboration_count: 2
+
+# Auto-escalate leads whose value score crosses this threshold.
+escalate_value_score: 70
+
+# Decision tags considered "commercial" (count toward the KPI); everything else is
+# kept for labeling but excluded from the commercial card count (CLAUDE.md §1.1).
+commercial_tags:
+  - competitor_move
+  - demand_shift
+  - regulatory_change
+  - funnel_structure
+
+noise_tags:
+  - bot_pump_noise_filter
+
+# Lead lifecycle: how long an unresolved lead stays open before auto re-queue / close.
+lead_ttl_days: 7

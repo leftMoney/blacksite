@@ -1,0 +1,36 @@
+# <INSTANCE> — TikTok hashtag/keyword scan policy (example shape — customize).
+# Loaded by: agents/tiktok/tiktok_listen.py, blacksite_daemon.
+# Mode: anonymous Playwright for public hashtag/search. Persona FYP shaping is separate.
+# All times = this instance's locked offset (see INSTANCE.md frontmatter).
+
+scope: read_only_anonymous
+
+scan:
+  enable: true
+  schedule_cron: "10,40 * * * *"            # twice an hour
+  per_run_max_hashtags: 6
+  per_run_max_keywords: 6
+  per_run_max_videos_per_target: 30
+  inter_request_sleep_s: [5, 12]
+  endpoints:
+    hashtag_url: "https://www.tiktok.com/tag/{tag}"
+    search_url: "https://www.tiktok.com/search?q={query}"
+    user_url: "https://www.tiktok.com/@{handle}"
+
+# TODO: replace with YOUR market's terms (in the target market's language).
+hashtags:
+  yolk:  ["example_yolk_tag_1", "example_yolk_tag_2"]
+  white: ["example_white_tag_1", "example_white_tag_2"]
+  brand: ["examplebet", "slotbrand-a"]        # competitor/target brands you track
+
+search_queries:
+  - "example query 1"
+  - "example query 2"
+
+handles:
+  target_kol: []        # populated after first scan reveals dominant creators
+  competitor: []
+
+output:
+  raw_jsonl_dir: instances/_TEMPLATE/runtime/raw/tiktok
+  download_video: false
